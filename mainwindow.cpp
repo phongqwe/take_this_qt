@@ -56,13 +56,7 @@ void MainWindow::createTrayIcon() {
         this->trayIconMenu->addAction(this->showTestWindowAction);
         this->trayIconMenu->addAction(this->exitAction);
         this->trayIcon = new QSystemTrayIcon(this);
-//        QIcon icon(tr("/home/abc/Documents/gits/take_this_qt/icon_neon.png"));
         QIcon icon(tr("://icon_neon.png"));
-
-//        QPixmap iconPixmap;
-//        iconPixmap.loadFromData(reinterpret_cast<const uchar *>(&iconNeon), sizeof(iconNeon)/sizeof(iconNeon[0]), "png");
-//        qDebug()<< iconPixmap.toImage().save("/home/abc/Documents/gits/take_this_qt/icon_neon2.png");
-//        QIcon icon(iconPixmap);
         this->trayIcon->setIcon(icon);
         this->trayIcon->setContextMenu(this->trayIconMenu);
     }
@@ -111,9 +105,7 @@ void MainWindow::takeScreenshot(CroppingInfo croppingInfo) {
                 croppingInfo.position.x(), croppingInfo.position.y(),
                 croppingInfo.size.width(), croppingInfo.size.height()
         );
-
         Q_EMIT doneTakingImage(pixmap,croppingInfo);
-//      pixmap.toImage().save("/home/abc/Documents/gits/take_this_qt/out_dialog.png", "png");
     });
 }
 
