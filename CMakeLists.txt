@@ -41,7 +41,7 @@ add_executable(take_this_qt
         resources/resources.qrc
 
 
-        )
+        src/config/ConfigView.cpp src/config/ConfigView.h src/config/configview.ui)
 
 target_link_libraries(take_this_qt PRIVATE Qt${QT_VERSION}::Widgets)
 target_link_libraries(take_this_qt PRIVATE Qt${QT_VERSION}::Test)
