@@ -1,13 +1,13 @@
 #include <QtGui/QMouseEvent>
 #include "floatimagedialog.h"
 #include "ui_floatimagedialog.h"
-//#include <qdebug.h>
 #include <QDebug>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
 #include <QDateTime>
 #include <QClipboard>
-
+#include "src/config/Config.h"
+#include <memory>
 FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWidget *parent) :
         QDialog(parent),
         ui(new Ui::FloatImageDialog) {
@@ -21,8 +21,15 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
     this->setWindowFlag(Qt::WindowStaysOnTopHint);
     this->setWindowFlag(Qt::FramelessWindowHint);
     this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+
     connect(this,&QWidget::customContextMenuRequested,
             this,&FloatImageDialog::showContextMenu);
+    connect(Config::getInstance().get(),
+            &Config::settingChangedSignal,
+            [this](std::shared_ptr<Config> config){
+        // TODO de-draw this view when setting is changed
+        qDebug()<< "ReDraw";
+    });
 }
 
 FloatImageDialog::~FloatImageDialog() {
@@ -37,8 +44,8 @@ void FloatImageDialog::mousePressEvent(QMouseEvent *event) {
     }
     if (event->button() == Qt::MouseButton::LeftButton) {
         this->isLeftMouseDown = true;
-        this->xDistanceBetweenCornerAndMouse = abs(event->globalX() - this->x());
-        this->yDistanceBetweenCornerAndMouse = abs(event->globalY() - this->y());
+        this->xDistanceBetweenCornerAndMouse = abs(event->globalPosition().x() - this->x());
+        this->yDistanceBetweenCornerAndMouse = abs(event->globalPosition().y() - this->y());
     }
 }
 
@@ -58,8 +65,8 @@ void FloatImageDialog::mouseMoveEvent(QMouseEvent *event) {
     qDebug() << event->button();
     if (this->isLeftMouseDown) {
         qDebug() << tr("FloatImage: Move mouse - left button");
-        QPoint newXY = QPoint(event->globalX() - this->xDistanceBetweenCornerAndMouse,
-                              event->globalY() - this->yDistanceBetweenCornerAndMouse);
+        QPoint newXY = QPoint(event->globalPosition().x() - this->xDistanceBetweenCornerAndMouse,
+                              event->globalPosition().y() - this->yDistanceBetweenCornerAndMouse);
         qDebug() << newXY;
         this->move(newXY);
 

@@ -2,7 +2,7 @@
 #define FLOATIMAGEDIALOG_H
 
 #include <QDialog>
-#include <src/Other/CroppingInfo.h>
+#include "../Other/CroppingInfo.h"
 #include <QDebug>
 #include <QtWidgets/QMenu>
 

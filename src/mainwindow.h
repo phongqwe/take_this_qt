@@ -4,10 +4,10 @@
 #include <QMainWindow>
 #include <iostream>
 #include <QtWidgets/QSystemTrayIcon>
-#include "src/TransparentDialog/transparentdialog.h"
-#include "src/FloatImageDialog/floatimagedialog.h"
+#include "TransparentDialog/transparentdialog.h"
+#include "FloatImageDialog/floatimagedialog.h"
 #include <QWindow>
-#include <src/Other/Config.h>
+#include "config/Config.h"
 #include <memory>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

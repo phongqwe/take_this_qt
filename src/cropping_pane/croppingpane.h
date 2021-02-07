@@ -2,7 +2,7 @@
 #define CROPPINGPANE_H
 
 #include <QWidget>
-#include <src/Other/CroppingInfo.h>
+#include "../Other/CroppingInfo.h"
 #include <qdebug.h>
 namespace Ui {
 class CroppingPane;
@@ -16,7 +16,7 @@ protected:
 
 public:
     explicit CroppingPane(QWidget *parent = nullptr);
-    ~CroppingPane();
+    ~CroppingPane() override;
     CroppingInfo getCroppingInfo();
     void reset();
 

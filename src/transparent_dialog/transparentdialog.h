@@ -2,8 +2,9 @@
 #define TRANSPARENTDIALOG_H
 
 #include <QDialog>
-#include <src/CroppingPane/croppingpane.h>
-#include "src/Other/CroppingInfo.h"
+#include "../CroppingPane/croppingpane.h"
+#include "../Other/CroppingInfo.h"
+
 namespace Ui {
 class TransparentDialog;
 }
@@ -13,13 +14,9 @@ class TransparentDialog : public QDialog
     Q_OBJECT
 protected:
     void mousePressEvent(QMouseEvent *event) override;
-
     void mouseReleaseEvent(QMouseEvent *event) override;
-
     void mouseMoveEvent(QMouseEvent *event) override;
-
     void hideEvent(QHideEvent *event) override;
-
     void closeEvent(QCloseEvent *event) override;
 
 private:
@@ -34,8 +31,6 @@ private:
     Ui::TransparentDialog *ui;
     QPoint anchor;
     CroppingPane* croppingPane = nullptr;
-
-
 
 signals:
     void readyToTakeScreenshot(CroppingInfo croppingInfo);
