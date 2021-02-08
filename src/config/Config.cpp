@@ -4,8 +4,10 @@
 
 #include "Config.h"
 
-const QString Config::SKEY_FRAMED_FLOAT_IMG = "FRAMED_FLOAT_IMG";
-
+const QString Config::SKEY_FRAMED_FLOAT_IMG="SKEY_FRAMED_FLOAT_IMG";
+const QString Config::SKEY_WAIT_DURATION="SKEY_WAIT_DURATION";
+const QString Config::SKEY_FLOAT_IMG_ALWAYS_ON_TOP="SKEY_FLOAT_IMG_ALWAYS_ON_TOP";
+const QString Config::SKEY_CLICK_TO_CLOSE_FLOAT_IMG="SKEY_CLICK_TO_CLOSE_FLOAT_IMG";
 
 std::shared_ptr<Config> Config::instance = nullptr;
 
@@ -17,10 +19,13 @@ std::shared_ptr<Config> Config::getInstance() {
 }
 
 void Config::loadFromStorage() {
-    this->setFramedFloatImageFlag(this->settings.value(Config::SKEY_FRAMED_FLOAT_IMG, this->getFramedFloatImageFlag()).toBool());
-    this->setFloatImageAlwaysOnTopFlag(this->settings.value(Config::SKEY_FLOAT_IMG_ALWAYS_ON_TOP, this->getFloatImageAlwaysOnTopFlag()).toBool());
+    this->setFramedFloatImageFlag(
+            this->settings.value(Config::SKEY_FRAMED_FLOAT_IMG, this->getFramedFloatImageFlag()).toBool());
+    this->setFloatImageAlwaysOnTopFlag(
+            this->settings.value(Config::SKEY_FLOAT_IMG_ALWAYS_ON_TOP, this->getFloatImageAlwaysOnTopFlag()).toBool());
     this->setWaitInMilliSec(this->settings.value(Config::SKEY_WAIT_DURATION, this->getWaitInMilliSec()).toInt());
-    this->setClickToCloseFloatImgFlag(this->settings.value(Config::SKEY_CLICK_TO_CLOSE_FLOAT_IMG,this->getClickToCloseFloatImgFlag()).toBool());
+    this->setClickToCloseFloatImgFlag(
+            this->settings.value(Config::SKEY_CLICK_TO_CLOSE_FLOAT_IMG, this->getClickToCloseFloatImgFlag()).toBool());
 
 
 }

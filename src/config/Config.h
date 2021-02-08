@@ -8,9 +8,9 @@
 #include <memory>
 #include <QString>
 #include <QSettings>
-#include <QWidget>
-class Config {
-
+#include <QObject>
+class Config : public QObject{
+    Q_OBJECT
 private:
 
     static std::shared_ptr<Config> instance ;

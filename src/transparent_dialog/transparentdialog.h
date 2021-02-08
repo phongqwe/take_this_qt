@@ -2,8 +2,8 @@
 #define TRANSPARENTDIALOG_H
 
 #include <QDialog>
-#include "../CroppingPane/croppingpane.h"
-#include "../Other/CroppingInfo.h"
+#include "../cropping_pane/croppingpane.h"
+#include "../other/CroppingInfo.h"
 
 namespace Ui {
 class TransparentDialog;

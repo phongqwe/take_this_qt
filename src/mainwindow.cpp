@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "src/TransparentDialog/transparentdialog.h"
+#include "src/transparent_dialog/transparentdialog.h"
 #include <QDebug>
 #include <QScreen>
 #include <QThread>

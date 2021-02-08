@@ -2,7 +2,7 @@
 #define CROPPINGPANE_H
 
 #include <QWidget>
-#include "../Other/CroppingInfo.h"
+#include "../other/CroppingInfo.h"
 #include <qdebug.h>
 namespace Ui {
 class CroppingPane;

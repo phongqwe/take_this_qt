@@ -11,7 +11,7 @@ class TestBench : public QObject
 {
     Q_OBJECT
 private slots:
-            void testToUpper();
+    void testToUpper();
 };
 
 #endif //TAKE_THIS_QT_TESTBENCH_H

@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <iostream>
 #include <QtWidgets/QSystemTrayIcon>
-#include "TransparentDialog/transparentdialog.h"
-#include "FloatImageDialog/floatimagedialog.h"
+#include "transparent_dialog/transparentdialog.h"
+#include "floatImage_dialog/floatimagedialog.h"
 #include <QWindow>
 #include "config/Config.h"
 #include <memory>
