@@ -6,7 +6,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QDateTime>
 #include <QClipboard>
-#include "src/config/Config.h"
+#include "../config/Config.h"
 #include <memory>
 FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWidget *parent) :
         QDialog(parent),

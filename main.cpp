@@ -1,10 +1,9 @@
-#include "mainwindow.h"
+//#include "src/mainwindow.h"
 
 #include <QApplication>
 #include <QtGui>
-#include "src/config/Config.h"
-#include <memory>
-#include <QSettings>
+//#include "src/config/Config.h"
+#include <src/mainwindow.h>
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "src/transparent_dialog/transparentdialog.h"
+#include "transparent_dialog/transparentdialog.h"
 #include <QDebug>
 #include <QScreen>
 #include <QThread>
@@ -100,12 +100,6 @@ void MainWindow::createTransparentWindow() {
 
 void MainWindow::takeScreenshot(CroppingInfo croppingInfo) {
     QTimer::singleShot(Config::getInstance()->getWaitInMilliSec(), this, [this, croppingInfo]() {
-
-//        QPixmap pixmap = QApplication::primaryScreen()->grabWindow(
-//                QApplication::desktop()->winId(),
-//                croppingInfo.position.x(), croppingInfo.position.y(),
-//                croppingInfo.size.width(), croppingInfo.size.height()
-//        );
         QPixmap pixmap = QWidget::screen()->grabWindow(
                 QWidget::winId(),
                 croppingInfo.position.x(), croppingInfo.position.y(),

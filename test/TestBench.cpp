@@ -19,5 +19,5 @@ void TestBench::testToUpper()
     qInfo() << FRAMED_FLOAT_IMG;
 
 }
-QTEST_MAIN(TestBench)
-#include "TestBench.moc"
+//QTEST_MAIN(TestBench)
+//#include "TestBench.moc"

@@ -9,6 +9,9 @@
 #include <QString>
 #include <QSettings>
 #include <QObject>
+#include <QApplication>
+using std::shared_ptr;
+using std::make_shared;
 class Config : public QObject{
     Q_OBJECT
 private:
@@ -18,7 +21,7 @@ private:
     bool floatImgAlwaysOnTop=true;
     bool framedFloatImg=true;
     bool clickToCloseFloatImg=true;
-    QSettings settings;
+    shared_ptr<QSettings> settings;
 
 public:
     static const QString SKEY_FRAMED_FLOAT_IMG;
@@ -26,6 +29,8 @@ public:
     static const QString SKEY_FLOAT_IMG_ALWAYS_ON_TOP;
     static const QString SKEY_CLICK_TO_CLOSE_FLOAT_IMG;
 
+    explicit Config(shared_ptr<QSettings> settings);
+    ~Config() override;
     /**
      * load the setting from storage
      */
@@ -47,16 +52,16 @@ public:
     void writeSettingsToStorage();
     static std::shared_ptr<Config> getInstance();
 
+    int getWaitInMilliSec() const;
     void setWaitInMilliSec(int newValue);
-    int getWaitInMilliSec();
 
-    bool getFloatImageAlwaysOnTopFlag();
+    bool getFloatImageAlwaysOnTopFlag() const;
     void setFloatImageAlwaysOnTopFlag(bool newVal);
 
-    bool getFramedFloatImageFlag();
+    bool getFramedFloatImageFlag() const;
     void setFramedFloatImageFlag(bool newVal);
 
-    bool getClickToCloseFloatImgFlag();
+    bool getClickToCloseFloatImgFlag() const;
     void setClickToCloseFloatImgFlag(bool newVal);
 signals:
     void settingChangedSignal(std::shared_ptr<Config> config);

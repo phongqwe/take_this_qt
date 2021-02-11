@@ -2,7 +2,7 @@
 #include "ui_transparentdialog.h"
 #include <QDebug>
 #include <QMouseEvent>
-#include <src/other/CroppingInfo.h>
+#include "../other/CroppingInfo.h"
 #include <QScreen>
 #include <QEventLoop>
 #include <QPushButton>
