@@ -20,12 +20,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     this->createTrayIcon();
     this->createTransparentWindow();
     this->move(0, 0);
-    connect(ui->pushButton, &QPushButton::clicked, [this]() {
+    connect(ui->toTrayButton, &QPushButton::clicked, [this]() {
         this->toTray();
     });
 
+    connect(ui->configButton, &QPushButton::clicked,[this](){
+        this->showConfig();
+    });
+
     connect(this, &MainWindow::doneTakingImage, [this](const QPixmap &image, CroppingInfo croppingInfo) {
-        FloatImageDialog *floatImageDialog = new FloatImageDialog(
+        auto *floatImageDialog = new FloatImageDialog(
                 croppingInfo,
                 image, this);
         this->imagePanels.append(floatImageDialog);
@@ -53,9 +57,11 @@ MainWindow::~MainWindow() {
 void MainWindow::createTrayIcon() {
     if (this->trayIconMenu == nullptr) {
         this->trayIconMenu = new QMenu(this);
-        this->trayIconMenu->addAction(this->takePicAction);
-        this->trayIconMenu->addAction(this->showTestWindowAction);
-        this->trayIconMenu->addAction(this->exitAction);
+        auto tray = this->trayIconMenu;
+        tray->addAction(this->takePicAction);
+        tray->addAction(this->showTestWindowAction);
+        tray->addAction(this->openConfigDialogAction);
+        tray->addAction(this->exitAction);
         this->trayIcon = new QSystemTrayIcon(this);
         QIcon icon(tr("://icon_red.png"));
         this->trayIcon->setIcon(icon);
@@ -64,6 +70,7 @@ void MainWindow::createTrayIcon() {
 }
 
 void MainWindow::createActions() {
+    //create exit action
     if (this->exitAction == nullptr) {
         this->exitAction = new QAction(tr("Exit"), this);
         connect(exitAction, &QAction::triggered, []() {
@@ -71,6 +78,7 @@ void MainWindow::createActions() {
         });
     }
 
+    // create take pic/show transparent window action
     if (this->takePicAction == nullptr) {
         this->takePicAction = new QAction(tr("Take Pic"), this);
         connect(takePicAction, &QAction::triggered, [this]() {
@@ -78,12 +86,24 @@ void MainWindow::createActions() {
             this->showTransparentWindow();
         });
     }
+
+    // create show test window action
     if (this->showTestWindowAction == nullptr) {
         this->showTestWindowAction = new QAction(tr("show test window"), this);
         connect(this->showTestWindowAction, &QAction::triggered, [this]() {
             this->show();
         });
     }
+
+    // create open dialog action
+    if(this->openConfigDialogAction== nullptr){
+        this->openConfigDialogAction = new QAction("Config",this);
+        this->connect(this->openConfigDialogAction,&QAction::triggered,[this](){
+
+            this->showConfig();
+        });
+    }
+
 }
 
 void MainWindow::createTransparentWindow() {
@@ -112,7 +132,15 @@ void MainWindow::takeScreenshot(CroppingInfo croppingInfo) {
 
 void MainWindow::showTransparentWindow() {
     if (!this->transparentDialog->isVisible()) {
-        this->transparentDialog->showMaximized();
+        this->transparentDialog->exec();
+//        this->transparentDialog->showMaximized();
     }
     this->transparentDialog->move(0, 0);
+}
+
+void MainWindow::showConfig() {
+    if(this->configView==nullptr){
+        this->configView = new ConfigView(this);
+    }
+    this->configView->exec();
 }

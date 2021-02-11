@@ -26,8 +26,6 @@ void Config::loadFromStorage() {
     this->setWaitInMilliSec(this->settings->value(Config::SKEY_WAIT_DURATION, this->getWaitInMilliSec()).toInt());
     this->setClickToCloseFloatImgFlag(
             this->settings->value(Config::SKEY_CLICK_TO_CLOSE_FLOAT_IMG, this->getClickToCloseFloatImgFlag()).toBool());
-
-
 }
 
 void Config::reloadFromStorage() {
@@ -36,7 +34,7 @@ void Config::reloadFromStorage() {
 
 void Config::setWaitInMilliSec(int newValue) {
     this->waitInMilliSec = newValue;
-    this->emitSetting();
+    this->emitSettingChanged();
 }
 
 int Config::getWaitInMilliSec() const {
@@ -49,6 +47,7 @@ bool Config::getFloatImageAlwaysOnTopFlag() const {
 
 void Config::setFloatImageAlwaysOnTopFlag(bool newFlag) {
     this->floatImgAlwaysOnTop = newFlag;
+//    this->emitSettingChanged();
 }
 
 bool Config::getFramedFloatImageFlag() const{
@@ -57,7 +56,7 @@ bool Config::getFramedFloatImageFlag() const{
 
 void Config::setFramedFloatImageFlag(bool newVal) {
     this->framedFloatImg = newVal;
-    this->emitSetting();
+//    this->emitSettingChanged();
 }
 
 bool Config::getClickToCloseFloatImgFlag() const {
@@ -66,10 +65,10 @@ bool Config::getClickToCloseFloatImgFlag() const {
 
 void Config::setClickToCloseFloatImgFlag(bool newVal) {
     this->clickToCloseFloatImg = newVal;
-    this->emitSetting();
+//    this->emitSettingChanged();
 }
 
-void Config::emitSetting() {
+void Config::emitSettingChanged() {
     Q_EMIT Config::settingChangedSignal(Config::getInstance());
 }
 
@@ -95,4 +94,8 @@ Config::Config(shared_ptr<QSettings> settings) {
 
 Config::~Config() {
 
+}
+
+shared_ptr<QSettings> Config::getQSettings() {
+    return this->settings;
 }

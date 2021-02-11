@@ -10,6 +10,7 @@
 #include "Config.h"
 
 using std::shared_ptr;
+using std::make_shared;
 QT_BEGIN_NAMESPACE
 namespace Ui { class ConfigView; }
 QT_END_NAMESPACE
@@ -22,12 +23,16 @@ public:
 
     ~ConfigView() override;
 
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private:
     Ui::ConfigView *ui;
     shared_ptr<Config> config;
 
     void okButtonHandler();
     void cancelButtonHandler();
+    void loadConfig();
 };
 
 #endif //TAKE_THIS_QT_CONFIGVIEW_H

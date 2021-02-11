@@ -20,7 +20,7 @@ private:
     int waitInMilliSec=500;
     bool floatImgAlwaysOnTop=true;
     bool framedFloatImg=true;
-    bool clickToCloseFloatImg=true;
+    bool clickToCloseFloatImg=false;
     shared_ptr<QSettings> settings;
 
 public:
@@ -31,6 +31,9 @@ public:
 
     explicit Config(shared_ptr<QSettings> settings);
     ~Config() override;
+
+    shared_ptr<QSettings> getQSettings();
+
     /**
      * load the setting from storage
      */
@@ -44,7 +47,7 @@ public:
     /**
      * emit the setting to those that subscribe to this config
      */
-    void emitSetting();
+    void emitSettingChanged();
 
     /**
      * write setting to storage

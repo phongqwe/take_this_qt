@@ -12,13 +12,9 @@ TransparentDialog::TransparentDialog(QWidget *parent) :
         ui(new Ui::TransparentDialog) {
     ui->setupUi(this);
     this->setWindowOpacity(this->opacity);
-//    this->setModal(true);
     this->move(QPoint(0, 0));
     this->setWindowTitle(tr("transparent dialog"));
-
-//    this->resize(desktop->size());
-//    this->setFixedSize(desktop->size());
-//    this->showMaximized();
+    this->resize(QWidget::screen()->size());
 
     this->croppingPane = new CroppingPane(this);
     QPalette pal = palette();

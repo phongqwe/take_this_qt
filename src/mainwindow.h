@@ -9,6 +9,8 @@
 #include <QWindow>
 #include "config/Config.h"
 #include <memory>
+#include "config/ConfigView.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -31,13 +33,15 @@ private:
     QAction *takePicAction = nullptr;
     QAction *showTestWindowAction = nullptr;
     QAction *exitAction = nullptr;
-
+    QAction *openConfigDialogAction = nullptr;
+    ConfigView *configView = nullptr;
     QVector<FloatImageDialog*> imagePanels;
 
     void createTrayIcon();
     void createActions();
     void createTransparentWindow();
     void showTransparentWindow();
+    void showConfig();
 public slots:
     void takeScreenshot(CroppingInfo croppingInfo);
 

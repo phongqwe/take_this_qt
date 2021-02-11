@@ -89,7 +89,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="waitDurationCheckBox"/>
+       <widget class="QSpinBox" name="waitDurationBox">
+        <property name="maximum">
+         <number>2000</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

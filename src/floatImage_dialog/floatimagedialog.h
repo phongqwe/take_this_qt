@@ -5,6 +5,11 @@
 #include "../other/CroppingInfo.h"
 #include <QDebug>
 #include <QtWidgets/QMenu>
+#include <memory>
+#include "../config/Config.h"
+
+using std::shared_ptr;
+using std::make_shared;
 
 namespace Ui {
 class FloatImageDialog;
@@ -39,6 +44,7 @@ private:
 
     void showContextMenu(const QPoint& menuPosition);
     void setupContextMenu();
+    void refreshMeWithConfig();
 };
 
 #endif // FLOATIMAGEDIALOG_H

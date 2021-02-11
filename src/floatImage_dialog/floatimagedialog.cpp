@@ -18,8 +18,14 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
     this->ui->imageLabel->resize(croppingInfo.size);
     this->pixmap = image.scaled(croppingInfo.size);
     this->ui->imageLabel->setPixmap(this->pixmap);
-    this->setWindowFlag(Qt::WindowStaysOnTopHint);
-    this->setWindowFlag(Qt::FramelessWindowHint);
+    if(Config::getInstance()->getFloatImageAlwaysOnTopFlag()){
+        this->setWindowFlag(Qt::WindowStaysOnTopHint);
+    }
+    if(!Config::getInstance()->getFramedFloatImageFlag()){
+        this->setWindowFlag(Qt::FramelessWindowHint);
+    }else{
+        this->setWindowFlag(Qt::WindowTitleHint);
+    }
     this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 
     connect(this,&QWidget::customContextMenuRequested,
@@ -27,7 +33,7 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
     connect(Config::getInstance().get(),
             &Config::settingChangedSignal,
             [this](std::shared_ptr<Config> config){
-        // TODO de-draw this view when setting is changed
+        this->refreshMeWithConfig();
         qDebug()<< "ReDraw";
     });
 }
@@ -51,7 +57,7 @@ void FloatImageDialog::mousePressEvent(QMouseEvent *event) {
 
 void FloatImageDialog::mouseReleaseEvent(QMouseEvent *event) {
     qDebug() << tr("FloatImage: Mouse release ");
-    if (this->preventClose==false) {
+    if (this->preventClose==false && Config::getInstance()->getClickToCloseFloatImgFlag()) {
         this->close();
     }
     this->preventClose = false;
@@ -115,6 +121,17 @@ void FloatImageDialog::setupContextMenu() {
         this->contextMenu = new QMenu(this);
         this->contextMenu->addAction(this->saveAction);
         this->contextMenu->addAction(this->copyToClipboardAction);
+    }
+}
+
+void FloatImageDialog::refreshMeWithConfig() {
+    if(Config::getInstance()->getFloatImageAlwaysOnTopFlag()){
+        this->setWindowFlag(Qt::WindowStaysOnTopHint);
+    }
+    if(!Config::getInstance()->getFramedFloatImageFlag()){
+        this->setWindowFlag(Qt::FramelessWindowHint);
+    }else{
+        this->setWindowFlag(Qt::WindowTitleHint);
     }
 }
 

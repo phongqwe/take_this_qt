@@ -9,7 +9,8 @@ add_executable(take_this_qt_test
         TestBench.h
         config_test/ConfigTest.cpp
         config_test/ConfigTest.h
-        testMain.cpp)
+        testMain.cpp
+        )
 
 target_link_libraries(take_this_qt_test PRIVATE Qt${QT_VERSION}::Widgets)
 target_link_libraries(take_this_qt_test PRIVATE Qt${QT_VERSION}::Test)
