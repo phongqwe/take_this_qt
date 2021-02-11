@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
 #include "transparent_dialog/transparentdialog.h"
 #include <QDebug>
 #include <QScreen>

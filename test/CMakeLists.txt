@@ -1,4 +1,4 @@
-
+include_directories(${CMAKE_BINARY_DIR})
 add_test(
         NAME allTest
         COMMAND take_this_qt_test
