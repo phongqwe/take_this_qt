@@ -19,15 +19,19 @@ private:
     static std::shared_ptr<Config> instance ;
     int waitInMilliSec=500;
     bool floatImgAlwaysOnTop=true;
-    bool framedFloatImg=true;
+    bool showTitleBarOnFloatImg=false;
     bool clickToCloseFloatImg=false;
+    bool enableResizeFloatImg = false;
+    bool showUiFloatImg = false;
     shared_ptr<QSettings> settings;
 
 public:
-    static const QString SKEY_FRAMED_FLOAT_IMG;
+    static const QString SKEY_SHOW_TITLE_BAR_ON_FLOAT_IMG;
     static const QString SKEY_WAIT_DURATION;
     static const QString SKEY_FLOAT_IMG_ALWAYS_ON_TOP;
     static const QString SKEY_CLICK_TO_CLOSE_FLOAT_IMG;
+    static const QString SKEY_ENABLE_RESIZE_FLOAT_IMG;
+    static const QString SKEY_SHOW_UI_FLOAT_IMG;
 
     explicit Config(shared_ptr<QSettings> settings);
     ~Config() override;
@@ -61,11 +65,18 @@ public:
     bool getFloatImageAlwaysOnTopFlag() const;
     void setFloatImageAlwaysOnTopFlag(bool newVal);
 
-    bool getFramedFloatImageFlag() const;
-    void setFramedFloatImageFlag(bool newVal);
+    bool getShowTitleBarOnFloatImage() const;
+    void setShowTitleBarOnFloatImage(bool newVal);
 
     bool getClickToCloseFloatImgFlag() const;
     void setClickToCloseFloatImgFlag(bool newVal);
+
+    bool getEnableResizeFloatImg() const;
+    void setEnableResizeFloatImg(bool newVal);
+
+    bool getShowUiFloatImg() const;
+    void setShowUiFloatImg(bool newVal);
+
 signals:
     void settingChangedSignal(shared_ptr<Config> config);
 };

@@ -20,7 +20,7 @@ void ConfigTest::init(){
 void ConfigTest::testInitConfigValue() {
     Q_ASSERT(stdConfig->getFloatImageAlwaysOnTopFlag());
     Q_ASSERT(!stdConfig->getClickToCloseFloatImgFlag());
-    Q_ASSERT(stdConfig->getFramedFloatImageFlag());
+    Q_ASSERT(stdConfig->getShowTitleBarOnFloatImage());
 }
 
 void ConfigTest::testEmitSettingChanged() {
@@ -71,12 +71,12 @@ void ConfigTest::testWriteConfigToStorage() {
     shared_ptr<Config> c = this->stdConfig;
     bool newClickToClose = !c->getClickToCloseFloatImgFlag();
     bool newOnTopValue = !c->getFloatImageAlwaysOnTopFlag();
-    bool newFramedValue = !c->getFramedFloatImageFlag();
+    bool newFramedValue = !c->getShowTitleBarOnFloatImage();
     int newWait = c->getWaitInMilliSec()*2+1;
 
     c->setClickToCloseFloatImgFlag(newClickToClose);
     c->setFloatImageAlwaysOnTopFlag(newOnTopValue);
-    c->setFramedFloatImageFlag(newFramedValue);
+    c->setShowTitleBarOnFloatImage(newFramedValue);
     c->setWaitInMilliSec(newWait);
 
     c->writeSettingsToStorage();
@@ -85,7 +85,7 @@ void ConfigTest::testWriteConfigToStorage() {
 
     QCOMPARE(st->value(Config::SKEY_CLICK_TO_CLOSE_FLOAT_IMG).toBool(),newClickToClose);
     QCOMPARE(st->value(Config::SKEY_FLOAT_IMG_ALWAYS_ON_TOP).toBool(),newOnTopValue);
-    QCOMPARE(st->value(Config::SKEY_FRAMED_FLOAT_IMG).toBool(),newFramedValue);
+    QCOMPARE(st->value(Config::SKEY_SHOW_TITLE_BAR_ON_FLOAT_IMG).toBool(), newFramedValue);
     QCOMPARE(st->value(Config::SKEY_WAIT_DURATION).toInt(),newWait);
 }
 
@@ -95,19 +95,19 @@ void ConfigTest::testReadConfigFromStorage(){
 
     bool newClickToClose = !c->getClickToCloseFloatImgFlag();
     bool newOnTopValue = !c->getFloatImageAlwaysOnTopFlag();
-    bool newFramedValue = !c->getFramedFloatImageFlag();
+    bool newFramedValue = !c->getShowTitleBarOnFloatImage();
     int newWait = c->getWaitInMilliSec()*2+1;
 
     st->setValue(Config::SKEY_CLICK_TO_CLOSE_FLOAT_IMG, newClickToClose);
     st->setValue(Config::SKEY_FLOAT_IMG_ALWAYS_ON_TOP, newOnTopValue);
-    st->setValue(Config::SKEY_FRAMED_FLOAT_IMG,newFramedValue);
+    st->setValue(Config::SKEY_SHOW_TITLE_BAR_ON_FLOAT_IMG, newFramedValue);
     st->setValue(Config::SKEY_WAIT_DURATION,newWait);
 
     c->loadFromStorage();
 
     QCOMPARE(c->getClickToCloseFloatImgFlag(), newClickToClose);
     QCOMPARE(c->getFloatImageAlwaysOnTopFlag(), newOnTopValue);
-    QCOMPARE(c->getFramedFloatImageFlag(), newFramedValue);
+    QCOMPARE(c->getShowTitleBarOnFloatImage(), newFramedValue);
     QCOMPARE(c->getWaitInMilliSec(), newWait);
 }
 
@@ -116,14 +116,14 @@ void ConfigTest::testLoadInit() {
 
     bool newClickToClose = c->getClickToCloseFloatImgFlag();
     bool newOnTopValue = c->getFloatImageAlwaysOnTopFlag();
-    bool newFramedValue = c->getFramedFloatImageFlag();
+    bool newFramedValue = c->getShowTitleBarOnFloatImage();
     int newWait = c->getWaitInMilliSec();
 
     c->loadFromStorage();
 
     QCOMPARE(c->getClickToCloseFloatImgFlag(), newClickToClose);
     QCOMPARE(c->getFloatImageAlwaysOnTopFlag(), newOnTopValue);
-    QCOMPARE(c->getFramedFloatImageFlag(), newFramedValue);
+    QCOMPARE(c->getShowTitleBarOnFloatImage(), newFramedValue);
     QCOMPARE(c->getWaitInMilliSec(), newWait);
 }
 //QTEST_MAIN(ConfigTest)

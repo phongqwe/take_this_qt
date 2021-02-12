@@ -41,7 +41,7 @@
      <x>150</x>
      <y>170</y>
      <width>23</width>
-     <height>53</height>
+     <height>113</height>
     </rect>
    </property>
    <widget class="QToolButton" name="resetResolutionButton">
@@ -82,6 +82,52 @@
     <property name="icon">
      <iconset resource="../../resources/resources.qrc">
       <normaloff>:/cross_icon_black.png</normaloff>:/cross_icon_black.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>25</width>
+      <height>25</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="copyButton">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>60</y>
+      <width>23</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>reset resolution</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resources/resources.qrc">
+      <normaloff>:/copy_icon_black.png</normaloff>:/copy_icon_black.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>25</width>
+      <height>25</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="saveButton">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>90</y>
+      <width>23</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>reset resolution</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resources/resources.qrc">
+      <normaloff>:/save_icon_black.png</normaloff>:/save_icon_black.png</iconset>
     </property>
     <property name="iconSize">
      <size>

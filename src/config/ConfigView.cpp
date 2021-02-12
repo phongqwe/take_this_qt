@@ -35,7 +35,7 @@ void ConfigView::cancelButtonHandler() {
 
 void ConfigView::okButtonHandler() {
     shared_ptr<Config> c = this->config;
-    c->setFramedFloatImageFlag(this->ui->framedImgOption->isChecked());
+    c->setShowTitleBarOnFloatImage(this->ui->framedImgOption->isChecked());
     c->setFloatImageAlwaysOnTopFlag(this->ui->imgOnTopOption->isChecked());
     c->setClickToCloseFloatImgFlag(this->ui->clickToCloseImgOption->isChecked());
     c->setWaitInMilliSec(this->ui->waitDurationBox->value());
@@ -48,7 +48,7 @@ void ConfigView::loadConfig(){
     c->loadFromStorage();
     ui->waitDurationBox->setValue(c->getWaitInMilliSec());
     ui->clickToCloseImgOption->setChecked(c->getClickToCloseFloatImgFlag());
-    ui->framedImgOption->setChecked(c->getFramedFloatImageFlag());
+    ui->framedImgOption->setChecked(c->getShowTitleBarOnFloatImage());
     ui->imgOnTopOption->setChecked(c->getFloatImageAlwaysOnTopFlag());
 }
 void ConfigView::showEvent(QShowEvent *event) {

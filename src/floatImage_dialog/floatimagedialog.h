@@ -50,6 +50,10 @@ private:
      * config this view with Config obj
      */
     void config(shared_ptr<Config> config);
+
+    void saveImage();
+
+    void copyImageToClipboard();
 };
 
 #endif // FLOATIMAGEDIALOG_H

@@ -26,14 +26,22 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
             this, &FloatImageDialog::showContextMenu);
 
     connect(Config::getInstance().get(),
-            &Config::settingChangedSignal,this,
+            &Config::settingChangedSignal, this,
             [this](std::shared_ptr<Config> config) {
                 this->config(config);
                 this->show();
             });
 
-    connect(this->ui->closeButton,&QToolButton::clicked,this,[this](){
-       this->accepted();
+    connect(this->ui->closeButton, &QToolButton::clicked, this, [this]() {
+        this->accepted();
+    });
+
+    connect(this->ui->saveButton,&QToolButton::clicked, this,[this](){
+        this->saveImage();
+    });
+
+    connect(this->ui->copyButton,&QToolButton::clicked,this,[this](){
+        this->copyImageToClipboard();
     });
 }
 
@@ -89,51 +97,60 @@ void FloatImageDialog::closeEvent(QCloseEvent *event) {
 void FloatImageDialog::showContextMenu(const QPoint &menuPosition) {
     this->setupContextMenu();
     this->contextMenu->show();
-
     this->contextMenu->move(this->mapToGlobal(menuPosition));
 }
 
 void FloatImageDialog::setupContextMenu() {
     if (this->saveAction == nullptr) {
         this->saveAction = new QAction("Save", this);
-        connect(this->saveAction, &QAction::triggered, [this]() {
-            // save the image
-            QString defaultFileName = "image_" + QDateTime::currentDateTime().toLocalTime().toString() + ".png";
-            qDebug() << defaultFileName;
-            QString fileName = QFileDialog::getSaveFileName(this, "Save image", defaultFileName, "*.png");
-            if (!fileName.isEmpty()) {
-                this->pixmap.toImage().save(fileName, "png");
-                qDebug() << "FloatImageDialog: save image to " + fileName;
-            }
+        connect(this->saveAction, &QAction::triggered, this, [this]() {
+            this->saveImage();
         });
     }
 
     if (this->copyToClipboardAction == nullptr) {
         this->copyToClipboardAction = new QAction("Copy to clipboard", this);
-        connect(this->copyToClipboardAction, &QAction::triggered, [this]() {
-            qDebug() << "FloatImageDialog: Copy to clipboard";
-            QApplication::clipboard()->setPixmap(this->pixmap);
+        connect(this->copyToClipboardAction, &QAction::triggered, this, [this]() {
+            this->copyImageToClipboard();
         });
     }
+
+    auto closeAction = new QAction("Close",this);
+    connect(closeAction, &QAction::triggered,this,[this](){
+        this->accepted();
+    });
+
+    auto resetSizeAction = new QAction("Reset size");
+    connect(resetSizeAction, &QAction::triggered,this,[this](){
+        // TODO resize the image
+        qDebug()<< "TODO add code to resize the image" ;
+    });
 
     if (this->contextMenu == nullptr) {
         this->contextMenu = new QMenu(this);
         this->contextMenu->addAction(this->saveAction);
         this->contextMenu->addAction(this->copyToClipboardAction);
+        this->contextMenu->addAction(resetSizeAction);
+        this->contextMenu->addAction(closeAction);
     }
 }
 
 void FloatImageDialog::config(shared_ptr<Config> config) {
     if (config->getFloatImageAlwaysOnTopFlag()) {
         this->setWindowFlag(Qt::WindowStaysOnTopHint);
-    }else{
+    } else {
         this->setWindowFlags(this->windowFlags() & ~Qt::WindowStaysOnTopHint);
     }
-    if (config->getFramedFloatImageFlag()) {
+    if (config->getShowTitleBarOnFloatImage()) {
         this->setWindowFlags(this->windowFlags() & ~Qt::FramelessWindowHint);
     } else {
         this->setWindowFlag(Qt::FramelessWindowHint);
     }
+//    if(Config::getInstance()->getShowUiFloatImg()){
+//        this->ui->buttonFrame->show();
+//    }else{
+//        this->ui->buttonFrame->hide();
+//    }
 }
 
 void FloatImageDialog::alignChildViews(CroppingInfo croppingInfo) {
@@ -146,5 +163,20 @@ void FloatImageDialog::alignChildViews(CroppingInfo croppingInfo) {
     if (buttonXPosition >= 0) {
         this->ui->buttonFrame->move(buttonXPosition, 5);
     }
+}
+
+void FloatImageDialog::saveImage() {
+    QString defaultFileName = "image_" + QDateTime::currentDateTime().toLocalTime().toString() + ".png";
+    qDebug() << defaultFileName;
+    QString fileName = QFileDialog::getSaveFileName(this, "Save image", defaultFileName, "*.png");
+    if (!fileName.isEmpty()) {
+        this->pixmap.toImage().save(fileName, "png");
+        qDebug() << "FloatImageDialog: save image to " + fileName;
+    }
+}
+
+void FloatImageDialog::copyImageToClipboard() {
+    qDebug() << "FloatImageDialog: Copy to clipboard";
+    QApplication::clipboard()->setPixmap(this->pixmap);
 }
 
