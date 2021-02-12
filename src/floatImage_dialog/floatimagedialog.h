@@ -44,7 +44,12 @@ private:
 
     void showContextMenu(const QPoint& menuPosition);
     void setupContextMenu();
-    void refreshMeWithConfig();
+    void alignChildViews(CroppingInfo croppingInfo);
+
+    /**
+     * config this view with Config obj
+     */
+    void config();
 };
 
 #endif // FLOATIMAGEDIALOG_H

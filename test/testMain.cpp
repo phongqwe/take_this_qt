@@ -11,9 +11,5 @@ int main(int argc, char** argv)
         ConfigTest tc;
         status |= QTest::qExec(&tc, argc, argv);
     }
-//    {
-//        TestClassB tc;
-//        status |= QTest::qExec(&tc, argc, argv);
-//    }
     return status;
 }

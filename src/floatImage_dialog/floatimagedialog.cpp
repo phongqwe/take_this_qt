@@ -8,34 +8,29 @@
 #include <QClipboard>
 #include "../config/Config.h"
 #include <memory>
+#include <QFlags>
+
 FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWidget *parent) :
         QDialog(parent),
         ui(new Ui::FloatImageDialog) {
     ui->setupUi(this);
     this->move(croppingInfo.position);
     this->setFixedSize(croppingInfo.size);
-    this->ui->imageLabel->move(0, 0);
-    this->ui->imageLabel->resize(croppingInfo.size);
+    this->alignChildViews(croppingInfo);
     this->pixmap = image.scaled(croppingInfo.size);
     this->ui->imageLabel->setPixmap(this->pixmap);
-    if(Config::getInstance()->getFloatImageAlwaysOnTopFlag()){
-        this->setWindowFlag(Qt::WindowStaysOnTopHint);
-    }
-    if(!Config::getInstance()->getFramedFloatImageFlag()){
-        this->setWindowFlag(Qt::FramelessWindowHint);
-    }else{
-        this->setWindowFlag(Qt::WindowTitleHint);
-    }
+    this->config();
     this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 
-    connect(this,&QWidget::customContextMenuRequested,
-            this,&FloatImageDialog::showContextMenu);
+    connect(this, &QWidget::customContextMenuRequested,
+            this, &FloatImageDialog::showContextMenu);
+
     connect(Config::getInstance().get(),
             &Config::settingChangedSignal,
-            [this](std::shared_ptr<Config> config){
-        this->refreshMeWithConfig();
-        qDebug()<< "ReDraw";
-    });
+            [this](std::shared_ptr<Config> config) {
+                this->config();
+                this->show();
+            });
 }
 
 FloatImageDialog::~FloatImageDialog() {
@@ -57,7 +52,7 @@ void FloatImageDialog::mousePressEvent(QMouseEvent *event) {
 
 void FloatImageDialog::mouseReleaseEvent(QMouseEvent *event) {
     qDebug() << tr("FloatImage: Mouse release ");
-    if (this->preventClose==false && Config::getInstance()->getClickToCloseFloatImgFlag()) {
+    if (this->preventClose == false && Config::getInstance()->getClickToCloseFloatImgFlag()) {
         this->close();
     }
     this->preventClose = false;
@@ -87,7 +82,7 @@ void FloatImageDialog::closeEvent(QCloseEvent *event) {
     Q_EMIT QDialog::accepted();
 }
 
-void FloatImageDialog::showContextMenu(const QPoint& menuPosition) {
+void FloatImageDialog::showContextMenu(const QPoint &menuPosition) {
     this->setupContextMenu();
     this->contextMenu->show();
 
@@ -95,43 +90,57 @@ void FloatImageDialog::showContextMenu(const QPoint& menuPosition) {
 }
 
 void FloatImageDialog::setupContextMenu() {
-    if(this->saveAction == nullptr){
-        this->saveAction = new QAction("Save",this);
-        connect(this->saveAction,&QAction::triggered,[this](){
+    if (this->saveAction == nullptr) {
+        this->saveAction = new QAction("Save", this);
+        connect(this->saveAction, &QAction::triggered, [this]() {
             // save the image
-            QString defaultFileName = "image_" +  QDateTime::currentDateTime().toLocalTime().toString() + ".png";
+            QString defaultFileName = "image_" + QDateTime::currentDateTime().toLocalTime().toString() + ".png";
             qDebug() << defaultFileName;
-            QString fileName = QFileDialog::getSaveFileName(this,"Save image",defaultFileName,"*.png");
-            if(!fileName.isEmpty()){
+            QString fileName = QFileDialog::getSaveFileName(this, "Save image", defaultFileName, "*.png");
+            if (!fileName.isEmpty()) {
                 this->pixmap.toImage().save(fileName, "png");
                 qDebug() << "FloatImageDialog: save image to " + fileName;
             }
         });
     }
 
-    if(this->copyToClipboardAction== nullptr){
-        this->copyToClipboardAction = new QAction("Copy to clipboard",this);
-        connect(this->copyToClipboardAction,&QAction::triggered,[this](){
-            qDebug()<<"FloatImageDialog: Copy to clipboard";
+    if (this->copyToClipboardAction == nullptr) {
+        this->copyToClipboardAction = new QAction("Copy to clipboard", this);
+        connect(this->copyToClipboardAction, &QAction::triggered, [this]() {
+            qDebug() << "FloatImageDialog: Copy to clipboard";
             QApplication::clipboard()->setPixmap(this->pixmap);
         });
     }
 
-    if(this->contextMenu == nullptr){
+    if (this->contextMenu == nullptr) {
         this->contextMenu = new QMenu(this);
         this->contextMenu->addAction(this->saveAction);
         this->contextMenu->addAction(this->copyToClipboardAction);
     }
 }
 
-void FloatImageDialog::refreshMeWithConfig() {
-    if(Config::getInstance()->getFloatImageAlwaysOnTopFlag()){
+void FloatImageDialog::config() {
+    if (Config::getInstance()->getFloatImageAlwaysOnTopFlag()) {
         this->setWindowFlag(Qt::WindowStaysOnTopHint);
-    }
-    if(!Config::getInstance()->getFramedFloatImageFlag()){
-        this->setWindowFlag(Qt::FramelessWindowHint);
     }else{
-        this->setWindowFlag(Qt::WindowTitleHint);
+        this->setWindowFlags(this->windowFlags() & ~Qt::WindowStaysOnTopHint);
+    }
+    if (Config::getInstance()->getFramedFloatImageFlag()) {
+        this->setWindowFlags(this->windowFlags() & ~Qt::FramelessWindowHint);
+    } else {
+        this->setWindowFlag(Qt::FramelessWindowHint);
+    }
+}
+
+void FloatImageDialog::alignChildViews(CroppingInfo croppingInfo) {
+    // move image to top-left corner
+    this->ui->imageLabel->move(0, 0);
+    this->ui->imageLabel->resize(croppingInfo.size);
+
+    // move buttons to top-right corner
+    int buttonXPosition = croppingInfo.size.width() - this->ui->buttonFrame->width() - 5;
+    if (buttonXPosition >= 0) {
+        this->ui->buttonFrame->move(buttonXPosition, 5);
     }
 }
 

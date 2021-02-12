@@ -28,9 +28,9 @@ private slots:
      * Test that setting changed signal is emitted when calling emitSettingChanged() function
      */
     void testEmitSettingChanged();
-//    void testSetConfigs();
     void testWriteConfigToStorage();
     void testReadConfigFromStorage();
+    void testLoadInit();
 };
 
 

@@ -34,7 +34,6 @@ void Config::reloadFromStorage() {
 
 void Config::setWaitInMilliSec(int newValue) {
     this->waitInMilliSec = newValue;
-    this->emitSettingChanged();
 }
 
 int Config::getWaitInMilliSec() const {

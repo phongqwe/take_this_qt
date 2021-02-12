@@ -49,9 +49,8 @@ void ConfigView::loadConfig(){
     ui->clickToCloseImgOption->setChecked(c->getClickToCloseFloatImgFlag());
     ui->framedImgOption->setChecked(c->getFramedFloatImageFlag());
     ui->imgOnTopOption->setChecked(c->getFloatImageAlwaysOnTopFlag());
-
 }
 void ConfigView::showEvent(QShowEvent *event) {
-    QDialog::showEvent(event);
     this->loadConfig();
+    QDialog::showEvent(event);
 }

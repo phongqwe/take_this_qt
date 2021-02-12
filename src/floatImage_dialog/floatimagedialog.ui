@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>352</width>
+    <height>331</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,17 +16,84 @@
   <widget class="QLabel" name="imageLabel">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>151</width>
-     <height>81</height>
+     <x>10</x>
+     <y>10</y>
+     <width>183</width>
+     <height>112</height>
     </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Plain</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
    </property>
    <property name="text">
     <string>Image Label</string>
    </property>
   </widget>
+  <widget class="QWidget" name="buttonFrame" native="true">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>170</y>
+     <width>23</width>
+     <height>53</height>
+    </rect>
+   </property>
+   <widget class="QToolButton" name="resetResolutionButton">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>30</y>
+      <width>23</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>reset resolution</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resources/resources.qrc">
+      <normaloff>:/reset_icon_black.png</normaloff>:/reset_icon_black.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>25</width>
+      <height>25</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="closeButton">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>23</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Close</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../../resources/resources.qrc">
+      <normaloff>:/cross_icon_black.png</normaloff>:/cross_icon_black.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>25</width>
+      <height>25</height>
+     </size>
+    </property>
+   </widget>
+  </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../resources/resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

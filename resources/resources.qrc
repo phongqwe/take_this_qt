@@ -2,5 +2,10 @@
     <qresource>
         <file>icon_neon.png</file>
         <file>icon_red.png</file>
+        <file>reset_icon_black.png</file>
+        <file>reset_icon_neon.png</file>
+        <file>cross_icon_black.png</file>
+        <file>copy_icon_black.png</file>
+        <file>save_icon_black.png</file>
     </qresource>
 </RCC>

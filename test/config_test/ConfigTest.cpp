@@ -54,8 +54,6 @@ void ConfigTest::testEmitSettingChanged() {
 //    QCOMPARE(c->getWaitInMilliSec(),newWait);
 //};
 
-
-
 shared_ptr<QSignalSpy> ConfigTest::createSpySignal(){
     shared_ptr<QSignalSpy> dummy = make_shared<QSignalSpy>(this->stdConfig.get(), &Config::settingChangedSignal);
     return dummy;
@@ -75,7 +73,6 @@ void ConfigTest::testWriteConfigToStorage() {
     bool newOnTopValue = !c->getFloatImageAlwaysOnTopFlag();
     bool newFramedValue = !c->getFramedFloatImageFlag();
     int newWait = c->getWaitInMilliSec()*2+1;
-
 
     c->setClickToCloseFloatImgFlag(newClickToClose);
     c->setFloatImageAlwaysOnTopFlag(newOnTopValue);
@@ -112,7 +109,22 @@ void ConfigTest::testReadConfigFromStorage(){
     QCOMPARE(c->getFloatImageAlwaysOnTopFlag(), newOnTopValue);
     QCOMPARE(c->getFramedFloatImageFlag(), newFramedValue);
     QCOMPARE(c->getWaitInMilliSec(), newWait);
+}
 
+void ConfigTest::testLoadInit() {
+    shared_ptr<Config> c = this->stdConfig;
+
+    bool newClickToClose = c->getClickToCloseFloatImgFlag();
+    bool newOnTopValue = c->getFloatImageAlwaysOnTopFlag();
+    bool newFramedValue = c->getFramedFloatImageFlag();
+    int newWait = c->getWaitInMilliSec();
+
+    c->loadFromStorage();
+
+    QCOMPARE(c->getClickToCloseFloatImgFlag(), newClickToClose);
+    QCOMPARE(c->getFloatImageAlwaysOnTopFlag(), newOnTopValue);
+    QCOMPARE(c->getFramedFloatImageFlag(), newFramedValue);
+    QCOMPARE(c->getWaitInMilliSec(), newWait);
 }
 //QTEST_MAIN(ConfigTest)
 //#include "ConfigTest.moc"
