@@ -53,7 +53,7 @@ public:
      * write setting to storage
      */
     void writeSettingsToStorage();
-    static std::shared_ptr<Config> getInstance();
+    static shared_ptr<Config> getInstance();
 
     int getWaitInMilliSec() const;
     void setWaitInMilliSec(int newValue);
@@ -67,7 +67,7 @@ public:
     bool getClickToCloseFloatImgFlag() const;
     void setClickToCloseFloatImgFlag(bool newVal);
 signals:
-    void settingChangedSignal(std::shared_ptr<Config> config);
+    void settingChangedSignal(shared_ptr<Config> config);
 };
 
 

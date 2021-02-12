@@ -11,6 +11,7 @@ ConfigView::ConfigView(QWidget *parent) :
         QDialog(parent), ui(new Ui::ConfigView) {
     ui->setupUi(this);
     this->config = Config::getInstance();
+//    this-> config = make_shared<Config>(make_shared<QSettings>());
     shared_ptr<Config> c = this->config;
     this->setModal(true);
 
@@ -40,7 +41,7 @@ void ConfigView::okButtonHandler() {
     c->setWaitInMilliSec(this->ui->waitDurationBox->value());
     c-> emitSettingChanged();
     c->writeSettingsToStorage();
-    this->accept();
+    this->hide();
 }
 void ConfigView::loadConfig(){
     shared_ptr<Config> c = this->config;

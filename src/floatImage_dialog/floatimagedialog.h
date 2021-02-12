@@ -49,7 +49,7 @@ private:
     /**
      * config this view with Config obj
      */
-    void config();
+    void config(shared_ptr<Config> config);
 };
 
 #endif // FLOATIMAGEDIALOG_H

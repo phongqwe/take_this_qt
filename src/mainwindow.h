@@ -42,10 +42,13 @@ private:
     void createTransparentWindow();
     void showTransparentWindow();
     void showConfig();
+    void removeFloatImage(FloatImageDialog*);
 public slots:
     void takeScreenshot(CroppingInfo croppingInfo);
 
+
 signals:
     void doneTakingImage(QPixmap image, CroppingInfo croppingInfo);
+    void doneWithFloatImage(FloatImageDialog* floatImage);
 };
 #endif // MAINWINDOW_H

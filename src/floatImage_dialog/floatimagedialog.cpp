@@ -19,18 +19,22 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
     this->alignChildViews(croppingInfo);
     this->pixmap = image.scaled(croppingInfo.size);
     this->ui->imageLabel->setPixmap(this->pixmap);
-    this->config();
+    this->config(Config::getInstance());
     this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 
     connect(this, &QWidget::customContextMenuRequested,
             this, &FloatImageDialog::showContextMenu);
 
     connect(Config::getInstance().get(),
-            &Config::settingChangedSignal,
+            &Config::settingChangedSignal,this,
             [this](std::shared_ptr<Config> config) {
-                this->config();
+                this->config(config);
                 this->show();
             });
+
+    connect(this->ui->closeButton,&QToolButton::clicked,this,[this](){
+       this->accepted();
+    });
 }
 
 FloatImageDialog::~FloatImageDialog() {
@@ -53,7 +57,7 @@ void FloatImageDialog::mousePressEvent(QMouseEvent *event) {
 void FloatImageDialog::mouseReleaseEvent(QMouseEvent *event) {
     qDebug() << tr("FloatImage: Mouse release ");
     if (this->preventClose == false && Config::getInstance()->getClickToCloseFloatImgFlag()) {
-        this->close();
+        this->accepted();
     }
     this->preventClose = false;
     this->isLeftMouseDown = false;
@@ -119,13 +123,13 @@ void FloatImageDialog::setupContextMenu() {
     }
 }
 
-void FloatImageDialog::config() {
-    if (Config::getInstance()->getFloatImageAlwaysOnTopFlag()) {
+void FloatImageDialog::config(shared_ptr<Config> config) {
+    if (config->getFloatImageAlwaysOnTopFlag()) {
         this->setWindowFlag(Qt::WindowStaysOnTopHint);
     }else{
         this->setWindowFlags(this->windowFlags() & ~Qt::WindowStaysOnTopHint);
     }
-    if (Config::getInstance()->getFramedFloatImageFlag()) {
+    if (config->getFramedFloatImageFlag()) {
         this->setWindowFlags(this->windowFlags() & ~Qt::FramelessWindowHint);
     } else {
         this->setWindowFlag(Qt::FramelessWindowHint);

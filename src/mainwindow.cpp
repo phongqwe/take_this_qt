@@ -20,27 +20,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     this->createTrayIcon();
     this->createTransparentWindow();
     this->move(0, 0);
-    connect(ui->toTrayButton, &QPushButton::clicked, [this]() {
+    connect(ui->toTrayButton, &QPushButton::clicked,this, [this]() {
         this->toTray();
     });
 
-    connect(ui->configButton, &QPushButton::clicked,[this](){
+    connect(ui->configButton, &QPushButton::clicked,this,[this](){
         this->showConfig();
     });
 
-    connect(this, &MainWindow::doneTakingImage, [this](const QPixmap &image, CroppingInfo croppingInfo) {
+    connect(this, &MainWindow::doneTakingImage, this, [this](const QPixmap &image, CroppingInfo croppingInfo) {
         auto *floatImageDialog = new FloatImageDialog(
                 croppingInfo,
                 image, this);
         this->imagePanels.append(floatImageDialog);
+
         connect(floatImageDialog,
-                &QDialog::accepted,
+                &QDialog::accepted,this,
                 [this, floatImageDialog]() {
-                    floatImageDialog->setParent(nullptr);
-                    int rmCount = this->imagePanels.removeAll(floatImageDialog);
-                    qDebug() << rmCount;
-                    delete floatImageDialog;
+                    this->removeFloatImage(floatImageDialog);
                 });
+
         floatImageDialog->show();
     });
 }
@@ -98,12 +97,10 @@ void MainWindow::createActions() {
     // create open dialog action
     if(this->openConfigDialogAction== nullptr){
         this->openConfigDialogAction = new QAction("Config",this);
-        this->connect(this->openConfigDialogAction,&QAction::triggered,[this](){
-
+        connect(this->openConfigDialogAction,&QAction::triggered,[this](){
             this->showConfig();
         });
     }
-
 }
 
 void MainWindow::createTransparentWindow() {
@@ -133,7 +130,6 @@ void MainWindow::takeScreenshot(CroppingInfo croppingInfo) {
 void MainWindow::showTransparentWindow() {
     if (!this->transparentDialog->isVisible()) {
         this->transparentDialog->exec();
-//        this->transparentDialog->showMaximized();
     }
     this->transparentDialog->move(0, 0);
 }
@@ -143,4 +139,9 @@ void MainWindow::showConfig() {
         this->configView = new ConfigView(this);
     }
     this->configView->exec();
+}
+
+void MainWindow::removeFloatImage(FloatImageDialog* floatImg) {
+    qDebug()<< this->imagePanels.removeOne(floatImg);
+    floatImg->deleteLater();
 }
