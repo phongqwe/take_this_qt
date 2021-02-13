@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
                 this->showTransparentWindow();
             });
 
+    // init views & connect signal-slots
     this->createActions();
     this->createTrayIcon();
     this->createTransparentWindow();
@@ -42,6 +43,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
         floatImageDialog->show();
     });
+
+    // load config info
+    Config::getInstance()->loadFromStorage();
 }
 
 void MainWindow::toTray() {
@@ -79,7 +83,7 @@ void MainWindow::createActions() {
 
     // create take pic/show transparent window action
     if (this->takePicAction == nullptr) {
-        this->takePicAction = new QAction(tr("Take Pic"), this);
+        this->takePicAction = new QAction(tr("Take pic"), this);
         connect(takePicAction, &QAction::triggered, [this]() {
             //show transparent window
             this->showTransparentWindow();
@@ -88,7 +92,7 @@ void MainWindow::createActions() {
 
     // create show test window action
     if (this->showTestWindowAction == nullptr) {
-        this->showTestWindowAction = new QAction(tr("show test window"), this);
+        this->showTestWindowAction = new QAction(tr("Show app window"), this);
         connect(this->showTestWindowAction, &QAction::triggered, [this]() {
             this->show();
         });

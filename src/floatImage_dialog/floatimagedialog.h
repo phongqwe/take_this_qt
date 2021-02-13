@@ -44,16 +44,19 @@ private:
 
     void showContextMenu(const QPoint& menuPosition);
     void setupContextMenu();
-    void alignChildViews(CroppingInfo croppingInfo);
+    void alignChildViews(QSize size);
 
     /**
      * config this view with Config obj
      */
-    void config(shared_ptr<Config> config);
+    void config(shared_ptr<Config> config,CroppingInfo croppingInfo);
 
     void saveImage();
 
     void copyImageToClipboard();
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 };
 
 #endif // FLOATIMAGEDIALOG_H

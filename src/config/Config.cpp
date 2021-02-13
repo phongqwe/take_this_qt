@@ -112,6 +112,7 @@ void Config::setEnableResizeFloatImg(bool newVal){
 }
 
 bool Config::getShowUiFloatImg() const{
+//    qDebug()<< this->showUiFloatImg;
     return this->showUiFloatImg;
 }
 void Config::setShowUiFloatImg(bool newVal){

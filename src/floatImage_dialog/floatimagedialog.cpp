@@ -6,7 +6,6 @@
 #include <QtWidgets/QMessageBox>
 #include <QDateTime>
 #include <QClipboard>
-#include "../config/Config.h"
 #include <memory>
 #include <QFlags>
 
@@ -15,11 +14,10 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
         ui(new Ui::FloatImageDialog) {
     ui->setupUi(this);
     this->move(croppingInfo.position);
-    this->setFixedSize(croppingInfo.size);
-    this->alignChildViews(croppingInfo);
+    this->alignChildViews(croppingInfo.size);
     this->pixmap = image.scaled(croppingInfo.size);
     this->ui->imageLabel->setPixmap(this->pixmap);
-    this->config(Config::getInstance());
+    this->config(Config::getInstance(), croppingInfo);
     this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
 
     connect(this, &QWidget::customContextMenuRequested,
@@ -27,8 +25,8 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
 
     connect(Config::getInstance().get(),
             &Config::settingChangedSignal, this,
-            [this](std::shared_ptr<Config> config) {
-                this->config(config);
+            [this,croppingInfo](std::shared_ptr<Config> config) {
+                this->config(config,croppingInfo);
                 this->show();
             });
 
@@ -42,6 +40,10 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
 
     connect(this->ui->copyButton,&QToolButton::clicked,this,[this](){
         this->copyImageToClipboard();
+    });
+
+    connect(this->ui->resetResolutionButton, &QToolButton::clicked, this,[this,croppingInfo](){
+        this->resize(croppingInfo.size);
     });
 }
 
@@ -135,7 +137,7 @@ void FloatImageDialog::setupContextMenu() {
     }
 }
 
-void FloatImageDialog::config(shared_ptr<Config> config) {
+void FloatImageDialog::config(shared_ptr<Config> config, CroppingInfo croppingInfo) {
     if (config->getFloatImageAlwaysOnTopFlag()) {
         this->setWindowFlag(Qt::WindowStaysOnTopHint);
     } else {
@@ -146,20 +148,27 @@ void FloatImageDialog::config(shared_ptr<Config> config) {
     } else {
         this->setWindowFlag(Qt::FramelessWindowHint);
     }
-//    if(Config::getInstance()->getShowUiFloatImg()){
-//        this->ui->buttonFrame->show();
-//    }else{
-//        this->ui->buttonFrame->hide();
-//    }
+    if(config->getShowUiFloatImg()){
+        this->ui->buttonFrame->show();
+    }else{
+        this->ui->buttonFrame->hide();
+    }
+    if(config->getEnableResizeFloatImg()){
+        this->setWindowFlags(this->windowFlags() & ~Qt::MSWindowsFixedSizeDialogHint);
+        this->resize(croppingInfo.size);
+    }else{
+        this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
+        this->setFixedSize(croppingInfo.size);
+    }
 }
 
-void FloatImageDialog::alignChildViews(CroppingInfo croppingInfo) {
+void FloatImageDialog::alignChildViews(QSize size) {
     // move image to top-left corner
     this->ui->imageLabel->move(0, 0);
-    this->ui->imageLabel->resize(croppingInfo.size);
+    this->ui->imageLabel->resize(size);
 
     // move buttons to top-right corner
-    int buttonXPosition = croppingInfo.size.width() - this->ui->buttonFrame->width() - 5;
+    int buttonXPosition = size.width() - this->ui->buttonFrame->width() - 5;
     if (buttonXPosition >= 0) {
         this->ui->buttonFrame->move(buttonXPosition, 5);
     }
@@ -178,5 +187,12 @@ void FloatImageDialog::saveImage() {
 void FloatImageDialog::copyImageToClipboard() {
     qDebug() << "FloatImageDialog: Copy to clipboard";
     QApplication::clipboard()->setPixmap(this->pixmap);
+}
+
+void FloatImageDialog::resizeEvent(QResizeEvent *event) {
+    QDialog::resizeEvent(event);
+    this->alignChildViews(event->size());
+    this->pixmap.scaled(event->size());
+    this->ui->imageLabel->setPixmap(this->pixmap.scaled(event->size()));
 }
 

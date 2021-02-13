@@ -19,6 +19,6 @@ add_library(take_this_qt_lib STATIC
         config/ConfigView.cpp
         config/ConfigView.h
         config/ConfigView.ui
-        )
+        floatImage_dialog/FloatImageState.cpp floatImage_dialog/FloatImageState.h)
 
 target_link_libraries(take_this_qt_lib PUBLIC Qt${QT_VERSION}::Widgets)
