@@ -7,6 +7,7 @@
 #include <QtWidgets/QMenu>
 #include <memory>
 #include "../config/Config.h"
+//#include <
 
 using std::shared_ptr;
 using std::make_shared;
@@ -41,6 +42,7 @@ private:
     QMenu* contextMenu = nullptr;
     QAction* saveAction = nullptr;
     QAction* copyToClipboardAction = nullptr;
+    CroppingInfo originalCroppingInfo;
 
     void showContextMenu(const QPoint& menuPosition);
     void setupContextMenu();
@@ -54,7 +56,10 @@ private:
     void saveImage();
 
     void copyImageToClipboard();
-
+    void onResetSize(QResizeEvent *event);
+    QPoint getTopRightCorner();
+    void moveByTopRight(QPoint newTopRightCorner);
+    void resetSize();
 protected:
     void resizeEvent(QResizeEvent *event) override;
 };
