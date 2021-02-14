@@ -8,3 +8,7 @@ Step 2: build with cmake, remember to set CMAKE_PREFIX_PATH = qt location
 
 Eg:
 -DCMAKE_PREFIX_PATH=/dir/to/qt/6.0.1/gcc_64
+
+### TODO
+
+Add multi-screen support
