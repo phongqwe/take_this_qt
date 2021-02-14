@@ -12,6 +12,11 @@
 #include <QApplication>
 using std::shared_ptr;
 using std::make_shared;
+
+/**
+ * State class for ConfigView.
+ * Handle storing configuration info, read, and write info to storage
+ */
 class Config : public QObject{
     Q_OBJECT
 private:

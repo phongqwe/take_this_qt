@@ -38,7 +38,6 @@ void ConfigView::okButtonHandler() {
     c->setFloatImageAlwaysOnTopFlag(this->ui->imgOnTopOption->isChecked());
     c->setClickToCloseFloatImgFlag(this->ui->clickToCloseImgOption->isChecked());
     c->setWaitInMilliSec(this->ui->waitDurationBox->value());
-    c->setEnableResizeFloatImg(this->ui->enableResizeFloatImgOption->isChecked());
     c->setShowUiFloatImg(this->ui->showUiFloatImgOption->isChecked());
     c-> emitSettingChanged();
     c->writeSettingsToStorage();
@@ -51,7 +50,6 @@ void ConfigView::loadConfig(){
     ui->clickToCloseImgOption->setChecked(c->getClickToCloseFloatImgFlag());
     ui->framedImgOption->setChecked(c->getShowTitleBarOnFloatImage());
     ui->imgOnTopOption->setChecked(c->getFloatImageAlwaysOnTopFlag());
-    ui->enableResizeFloatImgOption->setChecked(c->getEnableResizeFloatImg());
     ui->showUiFloatImgOption->setChecked(c->getShowUiFloatImg());
 }
 void ConfigView::showEvent(QShowEvent *event) {

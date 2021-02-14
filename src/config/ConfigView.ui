@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>290</width>
-    <height>258</height>
+    <width>292</width>
+    <height>259</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,7 +44,7 @@
     <rect>
      <x>15</x>
      <y>8</y>
-     <width>266</width>
+     <width>268</width>
      <height>191</height>
     </rect>
    </property>
@@ -80,16 +80,6 @@
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="enableResizeFloatImgOption">
-      <property name="layoutDirection">
-       <enum>Qt::RightToLeft</enum>
-      </property>
-      <property name="text">
-       <string>Enable resizing images</string>
-      </property>
-     </widget>
-    </item>
-    <item>
      <widget class="QCheckBox" name="showUiFloatImgOption">
       <property name="layoutDirection">
        <enum>Qt::RightToLeft</enum>
@@ -104,7 +94,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Wait Duration</string>
+         <string>Wait Duration (milliseconds)</string>
         </property>
        </widget>
       </item>

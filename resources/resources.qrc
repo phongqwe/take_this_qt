@@ -7,5 +7,7 @@
         <file>cross_icon_black.png</file>
         <file>copy_icon_black.png</file>
         <file>save_icon_black.png</file>
+        <file>pinned_icon_black.png</file>
+        <file>unpinned_icon_black.png</file>
     </qresource>
 </RCC>

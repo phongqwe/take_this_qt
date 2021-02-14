@@ -20,7 +20,7 @@ void ConfigTest::init(){
 void ConfigTest::testInitConfigValue() {
     Q_ASSERT(stdConfig->getFloatImageAlwaysOnTopFlag());
     Q_ASSERT(!stdConfig->getClickToCloseFloatImgFlag());
-    Q_ASSERT(stdConfig->getShowTitleBarOnFloatImage());
+    Q_ASSERT(!stdConfig->getShowTitleBarOnFloatImage());
 }
 
 void ConfigTest::testEmitSettingChanged() {

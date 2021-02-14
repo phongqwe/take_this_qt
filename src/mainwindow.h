@@ -48,7 +48,6 @@ public slots:
 
 
 signals:
-    void doneTakingImage(QPixmap image, CroppingInfo croppingInfo);
-    void doneWithFloatImage(FloatImageDialog* floatImage);
+    void doneTakingImage(shared_ptr<QPixmap> image, CroppingInfo croppingInfo);
 };
 #endif // MAINWINDOW_H

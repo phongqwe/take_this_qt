@@ -8,6 +8,10 @@ namespace Ui {
 class CroppingPane;
 }
 
+/**
+ * A view for specifying the segment of the screen to take screenshot
+ * Displayed at the mouse's position when user hold down left-click on TransparentDialog
+ */
 class CroppingPane : public QWidget
 {
     Q_OBJECT
@@ -17,7 +21,15 @@ protected:
 public:
     explicit CroppingPane(QWidget *parent = nullptr);
     ~CroppingPane() override;
+    /**
+     * extract cropping info from this pane
+     * @return
+     */
     CroppingInfo getCroppingInfo();
+
+    /**
+     * resize this -> 0*0, then hide it
+     */
     void reset();
 
 private:

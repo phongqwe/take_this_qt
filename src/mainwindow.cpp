@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         this->showConfig();
     });
 
-    connect(this, &MainWindow::doneTakingImage, this, [this](const QPixmap &image, CroppingInfo croppingInfo) {
+    connect(this, &MainWindow::doneTakingImage, this, [this](shared_ptr<QPixmap> image, CroppingInfo croppingInfo) {
         auto *floatImageDialog = new FloatImageDialog(
                 croppingInfo,
                 image, this);
@@ -126,8 +126,9 @@ void MainWindow::takeScreenshot(CroppingInfo croppingInfo) {
                 croppingInfo.position.x(), croppingInfo.position.y(),
                 croppingInfo.size.width(), croppingInfo.size.height()
         );
+        shared_ptr<QPixmap> ptr = make_shared<QPixmap>(pixmap);
 
-        Q_EMIT doneTakingImage(pixmap, croppingInfo);
+        Q_EMIT doneTakingImage(ptr, croppingInfo);
     });
 }
 

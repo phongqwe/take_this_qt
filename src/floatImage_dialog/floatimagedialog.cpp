@@ -9,6 +9,8 @@
 #include <memory>
 #include <QFlags>
 #include <QPoint>
+#include <QIcon>
+//#include "FloatImageState.h"
 
 /**
  * TODO there is a bug when turn off then on resize option. The image are not resizable after turning such option back on.
@@ -16,17 +18,23 @@
  * @param image
  * @param parent
  */
-FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWidget *parent) :
-        QDialog(parent),
-        ui(new Ui::FloatImageDialog), originalCroppingInfo(croppingInfo) {
+FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, shared_ptr<QPixmap> image, QWidget *parent) :
+        FloatImageDialog(make_shared<FloatImageState>(),croppingInfo,image,parent){
+}
+
+
+FloatImageDialog::FloatImageDialog(shared_ptr<FloatImageState> state,
+                                   CroppingInfo croppingInfo,
+                                   shared_ptr<QPixmap> image,
+                                   QWidget *parent)
+                                   :QDialog(parent),ui(new Ui::FloatImageDialog),state(state),originalCroppingInfo(croppingInfo),pixmap(image) {
     ui->setupUi(this);
     this->move(croppingInfo.position);
     this->alignChildViews(croppingInfo.size);
-    this->pixmap = image.scaled(croppingInfo.size);
-    this->ui->imageLabel->setPixmap(this->pixmap);
+    this->ui->imageLabel->setPixmap(*this->pixmap);
     this->config(Config::getInstance(), croppingInfo);
     this->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-
+    this->setWindowFlags(this->windowFlags()|Qt::Dialog);
     connect(this, &QWidget::customContextMenuRequested,
             this, &FloatImageDialog::showContextMenu);
 
@@ -34,8 +42,7 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
             &Config::settingChangedSignal, this,
             [this, croppingInfo](std::shared_ptr<Config> config) {
                 this->config(config, croppingInfo);
-                this->hide();
-                this->show();
+                this->resettt();
             });
 
     connect(this->ui->closeButton, &QToolButton::clicked, this, [this]() {
@@ -50,9 +57,15 @@ FloatImageDialog::FloatImageDialog(CroppingInfo croppingInfo, QPixmap image, QWi
         this->copyImageToClipboard();
     });
 
-    connect(this->ui->resetResolutionButton, &QToolButton::clicked, this, [this, croppingInfo]() {
+    connect(this->ui->resetResolutionButton, &QToolButton::clicked, this, [this]() {
         this->resetSize();
     });
+
+    connect(this->ui->pinButton, &QToolButton::clicked,this,[this](){
+        shared_ptr<FloatImageState> newState = make_shared<FloatImageState>(this->state->flipPin());
+        this->loadState(newState);
+    });
+
 }
 
 FloatImageDialog::~FloatImageDialog() {
@@ -153,7 +166,7 @@ void FloatImageDialog::config(shared_ptr<Config> config, CroppingInfo croppingIn
     } else {
         this->ui->buttonFrame->hide();
     }
-
+    qDebug()<< "Enable resize: "<<config->getEnableResizeFloatImg();
     this->setWindowFlag(Qt::MSWindowsFixedSizeDialogHint, !config->getEnableResizeFloatImg());
 
     if (config->getEnableResizeFloatImg()) {
@@ -177,28 +190,29 @@ void FloatImageDialog::alignChildViews(QSize size) {
 
 void FloatImageDialog::saveImage() {
     QString defaultFileName = "image_" + QDateTime::currentDateTime().toLocalTime().toString() + ".png";
-    qDebug() << defaultFileName;
     QString fileName = QFileDialog::getSaveFileName(this, "Save image", defaultFileName, "*.png");
     if (!fileName.isEmpty()) {
-        this->pixmap.toImage().save(fileName, "png");
-        qDebug() << "FloatImageDialog: save image to " + fileName;
+        bool saveResult=this->pixmap->toImage().save(fileName, "png");
+        if(saveResult){
+            qDebug() << "FloatImageDialog: save image to " + fileName;
+        }else{
+            // TODO add code to handle unable to save file case.
+            qDebug() << "Unable to save: " + fileName;
+        }
     }
 }
 
 void FloatImageDialog::copyImageToClipboard() {
     qDebug() << "FloatImageDialog: Copy to clipboard";
-    QApplication::clipboard()->setPixmap(this->pixmap);
+    QApplication::clipboard()->setPixmap(*this->pixmap);
 }
 
 void FloatImageDialog::resizeEvent(QResizeEvent *event) {
     QDialog::resizeEvent(event);
-
-    // alight image and ui elements with the new size
     this->alignChildViews(event->size());
-
     // scale the image to the new size
-    this->pixmap.scaled(event->size());
-    this->ui->imageLabel->setPixmap(this->pixmap.scaled(event->size()));
+    this->pixmap->scaled(event->size());
+    this->ui->imageLabel->setPixmap(this->pixmap->scaled(event->size()));
 }
 
 QPoint FloatImageDialog::getTopRightCorner() {
@@ -207,7 +221,7 @@ QPoint FloatImageDialog::getTopRightCorner() {
 }
 
 void FloatImageDialog::moveByTopRight(QPoint newTopRightCorner) {
-//    // compute new top left corner for new size
+    // compute new top left corner for new size
     QPoint newTopLeftCorner = QPoint(newTopRightCorner.x() - this->width(), newTopRightCorner.y());
     this->move(newTopLeftCorner);
 }
@@ -218,5 +232,20 @@ void FloatImageDialog::resetSize() {
     this->moveByTopRight(topRightCorner);
 }
 
+void FloatImageDialog::loadState(shared_ptr<FloatImageState> state) {
+    this->state = state;
+    qDebug()<<state->getPinned();
+    this->window()->setWindowFlag(Qt::WindowStaysOnTopHint, state->getPinned());
+    if(state->getPinned()){
+        this->ui->pinButton->setIcon(QIcon(tr("://pinned_icon_black.png")));
+    }else{
+        this->ui->pinButton->setIcon(QIcon(tr("://unpinned_icon_black.png")));
+    }
+    this->resettt();
+}
 
-
+void FloatImageDialog::resettt() {
+    this->destroy();
+    this->create();
+    this->show();
+}

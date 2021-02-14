@@ -15,6 +15,9 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class ConfigView; }
 QT_END_NAMESPACE
 
+/**
+ * A view showing the application's configuration
+ */
 class ConfigView : public QDialog {
 Q_OBJECT
 
