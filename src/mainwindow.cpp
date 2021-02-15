@@ -66,7 +66,7 @@ void MainWindow::createTrayIcon() {
         tray->addAction(this->openConfigDialogAction);
         tray->addAction(this->exitAction);
         this->trayIcon = new QSystemTrayIcon(this);
-        QIcon icon(tr("://icon_red.png"));
+        QIcon icon(tr("://icon_neon.png"));
         this->trayIcon->setIcon(icon);
         this->trayIcon->setContextMenu(this->trayIconMenu);
     }

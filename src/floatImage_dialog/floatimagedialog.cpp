@@ -75,9 +75,9 @@ FloatImageDialog::~FloatImageDialog() {
 void FloatImageDialog::mousePressEvent(QMouseEvent *event) {
     qDebug() << tr("FloatImage: Mouse press");
     QWidget::mousePressEvent(event);
-    if (event->button() == Qt::MouseButton::RightButton) {
-        this->preventClose = true;
-    }
+//    if (event->button() == Qt::MouseButton::RightButton) {
+//        this->preventClose = true;
+//    }
     if (event->button() == Qt::MouseButton::LeftButton) {
         this->isLeftMouseDown = true;
         this->xDistanceBetweenCornerAndMouse = abs(event->globalPosition().x() - this->x());
@@ -85,8 +85,12 @@ void FloatImageDialog::mousePressEvent(QMouseEvent *event) {
     }
 }
 
+/**
+ * this handler is only triggered by the release of left mouse button
+ * @param event
+ */
 void FloatImageDialog::mouseReleaseEvent(QMouseEvent *event) {
-    qDebug() << tr("FloatImage: Mouse release ");
+    qDebug() << "FloatImage: Mouse release: " << event->button();
     if (this->preventClose == false && Config::getInstance()->getClickToCloseFloatImgFlag()) {
         this->accepted();
     }
@@ -105,7 +109,6 @@ void FloatImageDialog::mouseMoveEvent(QMouseEvent *event) {
                               event->globalPosition().y() - this->yDistanceBetweenCornerAndMouse);
         qDebug() << newXY;
         this->move(newXY);
-
         this->preventClose = true;
     }
 }
